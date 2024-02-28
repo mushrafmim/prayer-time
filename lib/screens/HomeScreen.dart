@@ -18,30 +18,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PrayerTimeApiService _prayerTimeApiService = PrayerTimeApiService();
   final PrayerTimePersistenceService _prayerTimePersistenceService = PrayerTimePersistenceService();
+
   PrayerDateRangeModel? prayerModel;
   bool unableToFetch = false;
+
+  final String _userRegion = "Colombo";
 
   @override
   void initState() {
     super.initState();
     fetchData();
   }
-
-  // Future<String> getRegion() async {
-  //   // Get the location of the user
-  //
-  //   LocationPermission permission = await Geolocator.checkPermission();
-  //
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //   }
-  //
-  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  //
-  //   print(position);
-  //
-  //   return "Colombo, Sri Lanka";
-  // }
 
   Future<void> fetchData() async {
     // fetch the data from the local storage if it exists
@@ -78,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             });
       }
-      // save the data to the local storage
     }
 
     setState(() {
@@ -113,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 toDate: prayerModel!.toDate,
               ),
             ...?prayerModel?.prayerTimes
-                .map((prayerTime) => PrayerWidget(prayerTime: prayerTime))
+                .map((prayerTime) => PrayerWidget(
+                prayerTime: prayerTime
+            ))
           ],
         ),
       ),
