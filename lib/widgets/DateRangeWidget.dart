@@ -21,13 +21,28 @@ class DateRangeWidget extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Flex(
-            direction: Axis.horizontal,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DateComponent(fromOrTo: "FROM", date: fromDate),
-              DateComponent(fromOrTo: "TO", date: toDate)
-            ]
+        child: Column(
+          children: [
+            Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DateComponent(fromOrTo: "FROM", date: fromDate),
+                  DateComponent(fromOrTo: "TO", date: toDate)
+                ]
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                  "Colombo Times",
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
