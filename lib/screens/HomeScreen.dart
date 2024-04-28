@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:prayertime/models/PrayerDateRangeModel.dart';
 import 'package:prayertime/constants/Colors.dart';
+import 'package:prayertime/screens/SettingsScreen.dart';
 import 'package:prayertime/services/PrayerTimeAPIService.dart';
 import 'package:prayertime/services/PrayerTimePersistenceService.dart';
+import 'package:prayertime/stores/SettingsStore.dart';
 import 'package:prayertime/widgets/DateRangeWidget.dart';
 import 'package:prayertime/widgets/PrayerWidget.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,10 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
   PrayerDateRangeModel? prayerModel;
   bool unableToFetch = false;
 
-  final String _userRegion = "Colombo";
+
+  String userRegion = "Eastern";
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     fetchData();
   }
@@ -43,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // After fetching it storing it to the localstorage.
         await _prayerTimePersistenceService.savePrayerDateRangeModel(prayerTime);
 
-      } on SocketException catch (e) {
+      } on SocketException {
         // handle the error
         unableToFetch = true;
 
@@ -74,16 +78,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsStore = Provider.of<SettingsStore>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Prayer Times',
-          style: TextStyle(
-            color: AppColors.primaryColor,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+          title: const Text(
+            'Prayer Times',
+            style: TextStyle(
+              color: AppColors.primaryColor,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
+          actions: [
+
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    )
+                );
+              },
+            ),
+          ]
       ),
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
@@ -97,11 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
               DateRangeWidget(
                 fromDate: prayerModel!.fromDate,
                 toDate: prayerModel!.toDate,
+                isEasternTime: settingsStore.settings.isEasternTime,
               ),
             ...?prayerModel?.prayerTimes
                 .map((prayerTime) => PrayerWidget(
-                prayerTime: prayerTime
-            ))
+                prayerTime: prayerTime,
+                isEasternTime: settingsStore.settings.isEasternTime))
           ],
         ),
       ),
