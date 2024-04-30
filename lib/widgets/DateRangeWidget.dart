@@ -4,11 +4,13 @@ import 'package:prayertime/constants/Colors.dart';
 class DateRangeWidget extends StatelessWidget {
   final DateTime fromDate;
   final DateTime toDate;
+  final bool isEasternTime;
 
   const DateRangeWidget({
     super.key,
     required this.fromDate,
-    required this.toDate
+    required this.toDate,
+    required this.isEasternTime
   });
 
   @override
@@ -31,14 +33,14 @@ class DateRangeWidget extends StatelessWidget {
                   DateComponent(fromOrTo: "TO", date: toDate)
                 ]
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text(
-                  "Colombo Times",
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16
+                isEasternTime ? "Eastern Times" : "Colombo Times",
+                style: const TextStyle(
+                    color: AppColors.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16
                 ),
               ),
             )

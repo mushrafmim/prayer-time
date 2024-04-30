@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:prayertime/models/PrayerDateRangeModel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:prayertime/utils/sharedPrefs.dart';
 
 class PrayerTimePersistenceService {
 
+  String key = 'prayer_date_range';
+
   Future<void> savePrayerDateRangeModel(PrayerDateRangeModel object) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('prayer_date_range', jsonEncode(object.toJson()));
+    await SharedPrefsUtils.saveSharedPref(key, jsonEncode(object.toJson()));
   }
 
   Future<PrayerDateRangeModel?> getPrayerDateRangeModel() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('prayer_date_range');
+    final jsonString = await SharedPrefsUtils.getSharedPref(key);
     if (jsonString == null) {
       return null;
     }
